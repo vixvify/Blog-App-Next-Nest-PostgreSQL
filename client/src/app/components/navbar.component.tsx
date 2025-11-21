@@ -4,7 +4,7 @@ export default function Navbarcomponent() {
   return (
     <div className="">
       <nav>
-        <ul className="flex justify-center items-center gap-10 text-xl h-20 ">
+        <ul className="flex justify-center items-center gap-10 text-xl h-20 text-white ">
           <Link href={"/"}>
             <li>Home</li>
           </Link>
