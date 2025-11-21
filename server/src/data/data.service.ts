@@ -28,4 +28,28 @@ export class DataService {
       return { status: 400, error: err };
     }
   }
+  async getSingleData(id: number) {
+    try {
+      const data = await this.prismaservice.blog.findUnique({ where: { id } });
+      return { status: 200, data };
+    } catch (err) {
+      return { status: 400, error: err };
+    }
+  }
+  async updateData(id: number, data: BlogDTO) {
+    try {
+      await this.prismaservice.blog.update({ where: { id }, data });
+      return { status: 200, msg: 'Update Complete' };
+    } catch (err) {
+      return { status: 400, error: err };
+    }
+  }
+  async deleteData(id: number) {
+    try {
+      await this.prismaservice.blog.delete({ where: { id } });
+      return { status: 200, msg: 'Delete Complete' };
+    } catch (err) {
+      return { status: 400, error: err };
+    }
+  }
 }

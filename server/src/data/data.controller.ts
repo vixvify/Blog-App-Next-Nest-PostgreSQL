@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { Get, Post, Body } from '@nestjs/common';
+import { Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { DataService } from './data.service';
 import { BlogDTO } from 'DTO/blog.dto';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('data')
 export class DataController {
@@ -11,8 +12,23 @@ export class DataController {
     return this.dataservice.getData();
   }
 
+  @Get('getSingleData/:id')
+  getSingleData(@Param('id', ParseIntPipe) id: number) {
+    return this.dataservice.getSingleData(id);
+  }
+
   @Post('createData')
   createData(@Body() data: BlogDTO) {
     return this.dataservice.createData(data);
+  }
+
+  @Put('updateData/:id')
+  updateData(@Param('id', ParseIntPipe) id: number, @Body() data: BlogDTO) {
+    return this.dataservice.updateData(id, data);
+  }
+
+  @Delete('deleteData/:id')
+  deleteData(@Param('id', ParseIntPipe) id: number) {
+    return this.dataservice.deleteData(id);
   }
 }
