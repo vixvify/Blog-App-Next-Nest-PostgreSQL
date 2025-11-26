@@ -5,7 +5,7 @@ import axios from "axios";
 import { fullblog } from "../../../../types/fullblog.type";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-
+import { useSession } from "next-auth/react";
 import { FaPen } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
@@ -13,6 +13,7 @@ export default function Home() {
   const [data, setData] = useState<fullblog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const getData = async () => {
     try {
@@ -76,6 +77,7 @@ export default function Home() {
         <div className="flex flex-col justify-center items-center gap-10 mt-20">
           {data.map((e: fullblog) => {
             const date = new Date(e.createdAt);
+            const isMind = session?.user.id === e.userId;
             return (
               <div
                 className="flex flex-col w-[50%] backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 shadow-xl"
@@ -88,18 +90,22 @@ export default function Home() {
                   <p className="text-white">{e.author}</p>
                   <h2 className="font-bold ml-5 text-white">Date</h2>
                   <p className="text-white">{date.toLocaleString()}</p>
-                  <FaPen
-                    style={{ color: "skyblue" }}
-                    className="ml-5 cursor-pointer"
-                    onClick={() => {
-                      router.push(`/pages/editform/${e.id}`);
-                    }}
-                  />
-                  <FaTrash
-                    style={{ color: "red" }}
-                    className="cursor-pointer"
-                    onClick={() => confirmDelete(e.id)}
-                  />
+                  {session && isMind && (
+                    <FaPen
+                      style={{ color: "skyblue" }}
+                      className="ml-5 cursor-pointer"
+                      onClick={() => {
+                        router.push(`/pages/editform/${e.id}`);
+                      }}
+                    />
+                  )}
+                  {session && isMind && (
+                    <FaTrash
+                      style={{ color: "red" }}
+                      className="cursor-pointer"
+                      onClick={() => confirmDelete(e.id)}
+                    />
+                  )}
                 </div>
               </div>
             );
